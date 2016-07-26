@@ -1,0 +1,242 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../dig-common/dig-common.html">
+<link rel="import" href="../paper-button/paper-button.html">
+<link rel="import" href="../paper-dialog/paper-dialog.html">
+<link rel="import" href="../paper-dialog-scrollable/paper-dialog-scrollable.html">
+<link rel="import" href="../checkbox-list-display/checkbox-list-display.html">
+<!--
+An element providing a way to view all facets in a dialog if number of facets is very large. Used with elastic-checkbox-list-filter
+to create elasticsearch filters. 
+
+Example:
+
+    <view-all-facets
+      title="Country"
+      buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
+      loading="[[countryLoading]]"
+      error="[[countryError]]"
+      facet-selection="{{countryFacetSelection}}"
+      agg-count="{{countryCount}}">
+    </view-all-facets>
+
+@demo demo/index.html
+-->
+
+<dom-module id="view-all-facets">
+  <template>
+    <style>
+      :host {
+        display: block;
+        --divider-color: transparent;
+      }
+      .dialog-font {
+        color: var(--primary-text-color);
+      }
+      .modal-section {
+        width: 400px;
+        height: 400px;
+      }
+      .view-all {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+      .hide-facets {
+        display: none;
+      }
+      .show-more-btn {
+        margin-top: 10px;
+        margin-bottom: 5px;
+      }
+    </style>
+    <template is="dom-if" if="[[checkForBuckets(buckets)]]">
+      <template is="dom-if" if="[[loading]]">
+        <div>Loading...</div>
+      </template>
+      <template is="dom-if" if="[[!loading]]">
+        <div class="view-all flex" on-tap="openFacetsModal">View All</div>
+      </template>
+    </template>
+    <paper-dialog id="facetsModal" modal>
+      <section class="layout vertical dialog-font">
+        <h4>[[title]]</h4>
+        <paper-dialog-scrollable class="layout flex modal-section">
+          <template is="dom-if" if="[[initializing]]">
+            <div>[[getInitializationText(paging)]]</div>
+          </template>
+          <div class$="[[getFacetClass(initializing)]]">
+            <checkbox-list-display
+              buckets="[[buckets]]"
+              facet-selection="{{facetSelection}}"
+              facets="{{facetsFullList}}"
+              show="0"
+              category="[[title]]">
+            </checkbox-list-display>
+            <template is="dom-if" if="[[displayShowMore(paging, loading, facetsFullList, aggCount)]]">
+              <paper-button raised class="show-more-btn" on-tap="showMoreAggs">Show More</paper-button>
+            </template>
+            <template is="dom-if" if="[[!facetsFullList.length]]">
+              <div>[[createFacetText(loading, error)]]</div>
+            </template>
+          </div>
+        </paper-dialog-scrollable>
+      </section>
+      <div class="buttons">
+        <paper-button dialog-confirm autofocus on-tap="closeFacetsModal">Close</paper-button>
+      </div>
+    </paper-dialog>
+  </template>
+  <script>
+    Polymer({
+      is: 'view-all-facets',
+
+      properties: {
+        /**
+         * Title to display over checkbox list.
+         */
+        title: {
+          type: String
+        },
+        /**
+         * the list of buckets from an elastic search aggregation result
+         */
+        buckets: {
+          type: Array
+        },
+        /**
+         * Max facets currently displayed (changes if paging is set to true).
+         */        
+        currentMaxFacets: {
+          type: Number,
+          value: 10,
+          notify: true
+        },
+        /**
+         * Indicates whether or not elasticsearch is still loading results.
+         */
+        loading: {
+          type: Boolean,
+          observer: 'toggleInitFlag'
+        },
+        /**
+         * Where the last elasticsearch error is stored (if any occur).
+         */
+        error: {
+          type: Object
+        },
+        /**
+         * Contains state of facet checkboxes
+         *
+         * @type: {{'Los Angeles': {text: 'Los Angeles, CA', key: 'Los Angeles', count: 10, enabled: true, category: 'City'}}}
+         */
+        facetSelection: {
+          type: Object,
+          value: function() {
+            return {};
+          },
+          notify: true
+        },
+        /**
+         * Current size of associated aggregation.
+         */
+        aggCount: {
+          type: Number,
+          value: 10,
+          notify: true
+        },
+        /**
+         * Wait to show user checkboxes until initializing is complete.
+         */
+        initializing: {
+          type: Boolean,
+          readOnly: true
+        },
+        /**
+         * When false (default), all facets will be shown. If set to true, 
+         * 'Show More' button will be displayed to page through results.
+         */
+        paging: {
+          type: Boolean,
+          value: false
+        }
+      },
+      /**
+       * Text to show when dialog is initializing based on value of paging.
+       * @param {Boolean} paging
+       */
+      getInitializationText: function(paging) {
+        return (paging ? 'Loading more facets...' : 'Loading full facet list...');
+      },
+      /**
+       * Determines whether or not to display 'Show More' button.
+       * @param {Boolean} paging
+       * @param {Boolean} loading
+       * @param {Array} facetsFullList from checkbox-list-display
+       * @param {number} aggCount - current size of associated aggregation
+       */
+      displayShowMore: function(paging, loading, facetsFullList, aggCount) {
+        return paging && !loading && facetsFullList.length >= aggCount;
+      },
+      /**
+       * Increments aggCount based on value of currentMaxFacets
+       */
+      showMoreAggs: function() {
+        this.aggCount += this.currentMaxFacets;
+      },
+      /**
+       * Checks if buckets exist
+       * @param {Array} buckets from aggregation
+       */
+      checkForBuckets: function(buckets) {
+        return (buckets && buckets.length > 0 ? true : false);
+      },
+      /**
+       * Opens the dialog to display all facets.
+       */
+      openFacetsModal: function() {
+        this.aggCount = this.paging ? this.aggCount += this.currentMaxFacets : 0;
+        this._setInitializing(this.loading ? true : false);
+        this.$.facetsModal.open();
+      },
+      /**
+       * Closes the dialog that displays all facets.
+       */
+      closeFacetsModal: function() {
+        this._setInitializing(false);
+        this.aggCount = this.currentMaxFacets;
+      },
+      /**
+       * Toggles initialization variable to false when applicable.
+       */
+      toggleInitFlag: function() {
+        if(this.loading === false && this.initializing === true) {
+          this._setInitializing(false);
+        }
+      },
+      /**
+       * Text to show if there aren't any facets.
+       * @param {Boolean} loading
+       * @param {Object} error
+       */
+      createFacetText: function(loading, error) {
+        return (loading ? 'Loading...' : (error ? error : 'No Facets'));
+      },
+      /**
+       * Hide facets if still initializing.
+       * @param {Boolean} initializing
+       */
+      getFacetClass: function(initializing) {
+        return (initializing ? 'hide-facets' : '');
+      }
+    });
+  </script>
+</dom-module>
