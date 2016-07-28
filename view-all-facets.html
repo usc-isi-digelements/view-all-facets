@@ -39,6 +39,7 @@ Example:
       :host {
         display: block;
         --divider-color: transparent;
+        ---selected-icon-color: var(--primary-text-color);
       }
       .dialog-font {
         color: var(--primary-text-color);
@@ -58,6 +59,18 @@ Example:
         margin-top: 10px;
         margin-bottom: 5px;
       }
+      .title {
+        font-size: 16px;
+        font-weight: 500;
+      }
+      .header {
+        font-size: 14px;
+        margin-bottom: 10px;
+        margin-right: 10px;
+      }
+      .agg-block {
+        height: 14px;
+      }
     </style>
     <template is="dom-if" if="[[checkForBuckets(buckets)]]">
       <template is="dom-if" if="[[loading]]">
@@ -69,15 +82,19 @@ Example:
     </template>
     <paper-dialog id="facetsModal" modal>
       <section class="layout vertical dialog-font">
-        <h4>[[title]]</h4>
+        <div class="header">
+          <div class="title">[[title]]</div>
+          <div class="agg-block">
+            <aggregation-sort facets="[[facetsFullList]]"
+              order-by="{{orderBy}}">
+            </aggregation-sort>
+          </div>
+        </div>
         <paper-dialog-scrollable class="layout flex modal-section">
           <template is="dom-if" if="[[initializing]]">
             <div>[[getInitializationText(paging)]]</div>
           </template>
           <div class$="[[getFacetClass(initializing)]]">
-            <aggregation-sort facets="[[facetsFullList]]"
-              order-by="{{orderBy}}">
-            </aggregation-sort>
             <checkbox-list-display
               buckets="[[buckets]]"
               facet-selection="{{facetSelection}}"
