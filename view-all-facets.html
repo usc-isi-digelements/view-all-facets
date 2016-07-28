@@ -14,6 +14,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../checkbox-list-display/checkbox-list-display.html">
+<link rel="import" href="../aggregation-sort/aggregation-sort.html">
 <!--
 An element providing a way to view all facets in a dialog if number of facets is very large. Used with elastic-checkbox-list-filter
 to create elasticsearch filters. 
@@ -74,6 +75,9 @@ Example:
             <div>[[getInitializationText(paging)]]</div>
           </template>
           <div class$="[[getFacetClass(initializing)]]">
+            <aggregation-sort facets="[[facetsFullList]]"
+              order-by="{{orderBy}}">
+            </aggregation-sort>
             <checkbox-list-display
               buckets="[[buckets]]"
               facet-selection="{{facetSelection}}"
@@ -167,21 +171,33 @@ Example:
         paging: {
           type: Boolean,
           value: false
+        },
+        /**
+         * Field on which to order associated aggregation.
+         */
+        orderBy: {
+          type: String,
+          value: '',
+          notify: true
         }
       },
       /**
        * Text to show when dialog is initializing based on value of paging.
+       *
        * @param {Boolean} paging
+       * @return {String} text to show user
        */
       getInitializationText: function(paging) {
         return (paging ? 'Loading more facets...' : 'Loading full facet list...');
       },
       /**
        * Determines whether or not to display 'Show More' button.
+       *
        * @param {Boolean} paging
        * @param {Boolean} loading
        * @param {Array} facetsFullList from checkbox-list-display
        * @param {number} aggCount - current size of associated aggregation
+       * @return {Boolean}
        */
       displayShowMore: function(paging, loading, facetsFullList, aggCount) {
         return paging && !loading && facetsFullList.length >= aggCount;
@@ -194,7 +210,9 @@ Example:
       },
       /**
        * Checks if buckets exist
+       *
        * @param {Array} buckets from aggregation
+       * @return {Boolean}
        */
       checkForBuckets: function(buckets) {
         return (buckets && buckets.length > 0 ? true : false);
@@ -224,15 +242,19 @@ Example:
       },
       /**
        * Text to show if there aren't any facets.
+       *
        * @param {Boolean} loading
        * @param {Object} error
+       * @return {String} text
        */
       createFacetText: function(loading, error) {
         return (loading ? 'Loading...' : (error ? error : 'No Facets'));
       },
       /**
        * Hide facets if still initializing.
+       *
        * @param {Boolean} initializing
+       * @return {String} class to use
        */
       getFacetClass: function(initializing) {
         return (initializing ? 'hide-facets' : '');
