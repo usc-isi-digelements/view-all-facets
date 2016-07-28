@@ -24,10 +24,13 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         loading="[[loading]]"
         error="[[error]]"
         facet-selection="{{facetSelection}}"
-        agg-count="{{count}}">
+        agg-count="{{count}}"
+        order-by="{{orderBy}}">
       </view-all-facets>
       <p>Facet Selection</p>
       <p>{{showFacetSelections(facetSelection.*)}}</p>
+      <p>Sort option: {{getOrderByString(orderBy)}}</p>
+      <p>Note that in dialog view, sort option is not hooked up to an aggregation in this demo and will not re-sort the checkbox list.</p>
     </template>
     <script>
         (function(document) {
@@ -61,6 +64,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
             demo.showFacetSelections = function(objectChange) {
                 return JSON.stringify(this.facetSelection);
+            };
+
+            demo.getOrderByString = function(orderBy) {
+              return orderBy === '' ? 'Blank (default option)' : orderBy;
             };
         })(document);
     </script>
