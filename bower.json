@@ -1,6 +1,6 @@
 {
   "name": "view-all-facets",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "authors": [
     "Next Century Corporation"
   ],
@@ -22,7 +22,7 @@
     "polymer": "Polymer/polymer#^1.2.0",
     "dig-common": "DigElements/dig-common#^0.0.4",
     "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.0",
-    "aggregation-sort": "DigElements/aggregation-sort#^0.0.2"
+    "aggregation-sort": "DigElements/aggregation-sort#^1.0.0"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
