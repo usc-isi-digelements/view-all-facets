@@ -66,19 +66,20 @@ Example:
       .header {
         font-size: 14px;
         margin-bottom: 10px;
-        margin-right: 10px;
       }
       .agg-block {
         height: 14px;
       }
     </style>
     <template is="dom-if" if="[[checkForBuckets(buckets)]]">
-      <template is="dom-if" if="[[loading]]">
-        <div>Loading...</div>
-      </template>
-      <template is="dom-if" if="[[!loading]]">
-        <div class="view-all flex" on-tap="openFacetsModal">View All</div>
-      </template>
+      <div class="flex">
+        <template is="dom-if" if="[[loading]]">
+          <span>Loading...</span>
+        </template>
+        <template is="dom-if" if="[[!loading]]">
+          <span class="view-all" on-tap="openFacetsModal">View All</span>
+        </template>
+      </div>
     </template>
     <paper-dialog id="facetsModal" modal>
       <section class="layout vertical dialog-font">
