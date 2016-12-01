@@ -1,6 +1,6 @@
 {
   "name": "view-all-facets",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "authors": [
     "Next Century Corporation"
   ],
@@ -20,8 +20,8 @@
   "dependencies": {
     "paper-elements": "PolymerElements/paper-elements#^1.0.1",
     "polymer": "Polymer/polymer#^1.2.0",
-    "dig-common": "DigElements/dig-common#^0.0.4",
-    "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.0",
+    "dig-common": "DigElements/dig-common#^0.0.5",
+    "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.3",
     "aggregation-sort": "DigElements/aggregation-sort#^1.0.0"
   },
   "devDependencies": {
@@ -29,6 +29,7 @@
     "web-component-tester": "^4.0.0"
   },
   "resolutions": {
-    "lodash": "^4.12.0"
+    "lodash": "^4.12.0",
+    "dig-common": "^0.0.5"
   }
 }

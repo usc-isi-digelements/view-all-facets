@@ -97,6 +97,8 @@ Example:
           </template>
           <div class$="[[getFacetClass(initializing)]]">
             <checkbox-list-display
+              images="[[images]]"
+              image-style-class="[[imageStyleClass]]"
               buckets="[[buckets]]"
               facet-selection="{{facetSelection}}"
               facets="{{facetsFullList}}"
@@ -197,6 +199,20 @@ Example:
           type: String,
           value: '',
           notify: true
+        },
+        /**
+         * Whether to show the text in the checkboxes as images.
+         */
+        images: {
+          type: Boolean,
+          value: false
+        },
+        /**
+         * The style class for images (if the "images" property is true).
+         */
+        imageStyleClass: {
+          type: String,
+          value: ''
         }
       },
       /**
