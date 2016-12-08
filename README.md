@@ -1,28 +1,22 @@
 # view-all-facets
 
-An element providing a way to view all facets in a dialog if number of facets is very large. Used with elastic-checkbox-list-filter
-to create elasticsearch filters.
+A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.  This lets users view all facets in a separate dialog window if the number of facets is very large.  Can be used with the [elastic-checkbox-list-filter](https://github.com/DigElements/elastic-checkbox-list-filter) element to create elasticsearch filters.
 
-Example:
+### Example
 ```html
-  <view-all-facets
-    title="Country"
-    buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
-    loading="[[countryLoading]]"
-    error="[[countryError]]"
-    facet-selection="{{countryFacetSelection}}"
-    agg-count="{{countryCount}}">
-  </view-all-facets>
+    <view-all-facets
+        title="Country"
+        buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
+        loading="[[countryLoading]]"
+        error="[[countryError]]"
+        facet-selection="{{countryFacetSelection}}"
+        agg-count="{{countryCount}}">
+    </view-all-facets>
 ```
 
-## Dependencies
+### Dependencies
 
-Element dependencies are managed via [Bower](http://bower.io/). You can
-install that via:
+Dependencies are installed using [Bower](http://bower.io/):
 
     npm install -g bower
-
-Then, go ahead and download the element's dependencies:
-
     bower install
-

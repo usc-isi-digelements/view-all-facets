@@ -1,10 +1,10 @@
 {
   "name": "view-all-facets",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "authors": [
     "Next Century Corporation"
   ],
-  "description": "An element providing a way to view all facets in a dialog if number of facets is very large. Used with elastic-checkbox-list-filter.",
+  "description": "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
   "keywords": [
     "web-component",
     "polymer",
@@ -18,18 +18,13 @@
     "/test/"
   ],
   "dependencies": {
-    "paper-elements": "PolymerElements/paper-elements#^1.0.1",
-    "polymer": "Polymer/polymer#^1.2.0",
-    "dig-common": "DigElements/dig-common#^0.0.5",
-    "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.3",
-    "aggregation-sort": "DigElements/aggregation-sort#^1.0.0"
+    "polymer": "Polymer/polymer#^1.7.0",
+    "paper-elements": "PolymerElements/paper-elements#^1.0.7",
+    "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.4",
+    "aggregation-sort": "DigElements/aggregation-sort#^1.0.1"
   },
   "devDependencies": {
-    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
-    "web-component-tester": "^4.0.0"
-  },
-  "resolutions": {
-    "lodash": "^4.12.0",
-    "dig-common": "^0.0.5"
+    "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
+    "web-component-tester": "^5.0.0"
   }
 }

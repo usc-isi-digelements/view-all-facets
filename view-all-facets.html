@@ -1,33 +1,22 @@
-<!--
-@license
-Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
-This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
-The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
-The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
-Code distributed by Google as part of the polymer project is also
-subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
--->
-
 <link rel="import" href="../polymer/polymer.html">
-<link rel="import" href="../dig-common/dig-common.html">
 <link rel="import" href="../paper-button/paper-button.html">
 <link rel="import" href="../paper-dialog/paper-dialog.html">
 <link rel="import" href="../paper-dialog-scrollable/paper-dialog-scrollable.html">
 <link rel="import" href="../checkbox-list-display/checkbox-list-display.html">
 <link rel="import" href="../aggregation-sort/aggregation-sort.html">
-<!--
-An element providing a way to view all facets in a dialog if number of facets is very large. Used with elastic-checkbox-list-filter
-to create elasticsearch filters. 
 
-Example:
+<!--
+A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.  This lets users view all facets in a separate dialog window if the number of facets is very large.
+
+### Example
 
     <view-all-facets
-      title="Country"
-      buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
-      loading="[[countryLoading]]"
-      error="[[countryError]]"
-      facet-selection="{{countryFacetSelection}}"
-      agg-count="{{countryCount}}">
+        title="Country"
+        buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
+        loading="[[countryLoading]]"
+        error="[[countryError]]"
+        facet-selection="{{countryFacetSelection}}"
+        agg-count="{{countryCount}}">
     </view-all-facets>
 
 @demo demo/index.html
@@ -71,7 +60,8 @@ Example:
         height: 14px;
       }
     </style>
-    <template is="dom-if" if="[[checkForBuckets(buckets)]]">
+
+    <template is="dom-if" if="[[_checkForBuckets(buckets)]]">
       <div class="flex">
         <template is="dom-if" if="[[loading]]">
           <span>Loading...</span>
@@ -86,16 +76,16 @@ Example:
         <div class="header">
           <div class="title">[[title]]</div>
           <div class="agg-block">
-            <aggregation-sort facets="[[facetsFullList]]"
-              order-by="{{orderBy}}">
-            </aggregation-sort>
+            <template is="dom-if" if="[[facetsFullList.length]]">
+              <aggregation-sort order-by="{{orderBy}}"></aggregation-sort>
+            </template>
           </div>
         </div>
         <paper-dialog-scrollable class="modal-section">
           <template is="dom-if" if="[[initializing]]">
-            <div>[[getInitializationText(paging)]]</div>
+            <div>[[_getInitializationText(paging)]]</div>
           </template>
-          <div class$="[[getFacetClass(initializing)]]">
+          <div class$="[[_getFacetClass(initializing)]]">
             <checkbox-list-display
               images="[[images]]"
               image-style-class="[[imageStyleClass]]"
@@ -105,11 +95,11 @@ Example:
               show="0"
               category="[[title]]">
             </checkbox-list-display>
-            <template is="dom-if" if="[[displayShowMore(paging, loading, facetsFullList, aggCount)]]">
+            <template is="dom-if" if="[[_ableToShowMore(paging, loading, facetsFullList, aggCount)]]">
               <paper-button raised class="show-more-btn" on-tap="showMoreAggs">Show More</paper-button>
             </template>
             <template is="dom-if" if="[[!facetsFullList.length]]">
-              <div>[[createFacetText(loading, error)]]</div>
+              <div>[[_createFacetText(loading, error)]]</div>
             </template>
           </div>
         </paper-dialog-scrollable>
@@ -119,6 +109,7 @@ Example:
       </div>
     </paper-dialog>
   </template>
+
   <script>
     Polymer({
       is: 'view-all-facets',
@@ -126,41 +117,60 @@ Example:
       properties: {
         /**
          * Title to display over checkbox list.
+         *
+         * @type {String}
          */
         title: {
           type: String
         },
+
         /**
-         * the list of buckets from an elastic search aggregation result
+         * The list of buckets from an elastic search aggregation result used in the checkbox-list-display.  Each bucket is an object with properties:
+         * {Number} doc_count, {String} key, {String} text (optional)
+         *
+         * @type {Array}
          */
         buckets: {
           type: Array
         },
+
         /**
          * Max facets currently displayed (changes if paging is set to true).
-         */        
+         *
+         * @type {Number}
+         * @default 10
+         */
         currentMaxFacets: {
           type: Number,
           value: 10,
           notify: true
         },
+
         /**
          * Indicates whether or not elasticsearch is still loading results.
+         *
+         * @type {Boolean}
          */
         loading: {
           type: Boolean,
-          observer: 'toggleInitFlag'
+          observer: '_toggleInitialization'
         },
+
         /**
          * Where the last elasticsearch error is stored (if any occur).
+         *
+         * @type {Object}
          */
         error: {
           type: Object
         },
+
         /**
-         * Contains state of facet checkboxes
+         * Contains state of facet checkboxes to persist selection state between queries.  This object maps a facet bucket key to an object with properties:
+         * {String} category, boolean enabled, {String} key, {String} text
          *
-         * @type: {{'Los Angeles': {text: 'Los Angeles, CA', key: 'Los Angeles', count: 10, enabled: true, category: 'City'}}}
+         * @type {Object}
+         * @default {}
          */
         facetSelection: {
           type: Object,
@@ -169,88 +179,83 @@ Example:
           },
           notify: true
         },
+
         /**
          * Current size of associated aggregation.
+         *
+         * @type {Number}
+         * @default 10
          */
         aggCount: {
           type: Number,
           value: 10,
           notify: true
         },
+
         /**
          * Wait to show user checkboxes until initializing is complete.
+         *
+         * @type {Boolean}
          */
         initializing: {
           type: Boolean,
           readOnly: true
         },
+
         /**
-         * When false (default), all facets will be shown. If set to true, 
-         * 'Show More' button will be displayed to page through results.
+         * When false (default), all facets will be shown. If set to true, the 'Show More' button will be displayed to page through results.
+         *
+         * @type {Boolean}
+         * @default false
          */
         paging: {
           type: Boolean,
           value: false
         },
+
         /**
          * Field on which to order associated aggregation.
+         *
+         * @type {String}
+         * @default ''
          */
         orderBy: {
           type: String,
           value: '',
           notify: true
         },
+
         /**
          * Whether to show the text in the checkboxes as images.
+         *
+         * @type {Boolean}
+         * @default false
          */
         images: {
           type: Boolean,
           value: false
         },
+
         /**
          * The style class for images (if the "images" property is true).
+         *
+         * @type {String}
+         * @default ''
          */
         imageStyleClass: {
           type: String,
           value: ''
         }
       },
+
       /**
-       * Text to show when dialog is initializing based on value of paging.
-       *
-       * @param {Boolean} paging
-       * @return {String} text to show user
+       * Closes the dialog that displays all facets.
        */
-      getInitializationText: function(paging) {
-        return (paging ? 'Loading more facets...' : 'Loading full facet list...');
+      closeFacetsModal: function() {
+        this._setInitializing(false);
+        this.aggCount = this.currentMaxFacets;
       },
-      /**
-       * Determines whether or not to display 'Show More' button.
-       *
-       * @param {Boolean} paging
-       * @param {Boolean} loading
-       * @param {Array} facetsFullList from checkbox-list-display
-       * @param {number} aggCount - current size of associated aggregation
-       * @return {Boolean}
-       */
-      displayShowMore: function(paging, loading, facetsFullList, aggCount) {
-        return paging && !loading && facetsFullList.length >= aggCount;
-      },
-      /**
-       * Increments aggCount based on value of currentMaxFacets
-       */
-      showMoreAggs: function() {
-        this.aggCount += this.currentMaxFacets;
-      },
-      /**
-       * Checks if buckets exist
-       *
-       * @param {Array} buckets from aggregation
-       * @return {Boolean}
-       */
-      checkForBuckets: function(buckets) {
-        return (buckets && buckets.length > 0 ? true : false);
-      },
+
       /**
        * Opens the dialog to display all facets.
        */
@@ -259,39 +264,81 @@ Example:
         this._setInitializing(this.loading ? true : false);
         this.$.facetsModal.open();
       },
+
       /**
-       * Closes the dialog that displays all facets.
+       * Increments aggCount based on value of currentMaxFacets
        */
-      closeFacetsModal: function() {
-        this._setInitializing(false);
-        this.aggCount = this.currentMaxFacets;
+      showMoreAggs: function() {
+        this.aggCount += this.currentMaxFacets;
       },
+
       /**
-       * Toggles initialization variable to false when applicable.
+       * Determines whether or not the 'Show More' button should be visible.
+       *
+       * @param {Boolean} paging
+       * @param {Boolean} loading
+       * @param {Array} facetsFullList from checkbox-list-display
+       * @param {number} aggCount - current size of associated aggregation
+       * @return {Boolean}
+       * @private
        */
-      toggleInitFlag: function() {
-        if(this.loading === false && this.initializing === true) {
-          this._setInitializing(false);
-        }
+      _ableToShowMore: function(paging, loading, facetsFullList, aggCount) {
+        return paging && !loading && facetsFullList.length >= aggCount;
       },
+
+      /**
+       * Checks if buckets exist
+       *
+       * @param {Array} buckets from aggregation
+       * @return {Boolean}
+       * @private
+       */
+      _checkForBuckets: function(buckets) {
+        return (buckets && buckets.length > 0 ? true : false);
+      },
+
       /**
        * Text to show if there aren't any facets.
        *
        * @param {Boolean} loading
        * @param {Object} error
        * @return {String} text
+       * @private
        */
-      createFacetText: function(loading, error) {
+      _createFacetText: function(loading, error) {
         return (loading ? 'Loading...' : (error ? error : 'No Facets'));
       },
+
       /**
        * Hide facets if still initializing.
        *
        * @param {Boolean} initializing
        * @return {String} class to use
+       * @private
        */
-      getFacetClass: function(initializing) {
+      _getFacetClass: function(initializing) {
         return (initializing ? 'hide-facets' : '');
+      },
+
+      /**
+       * Text to show when dialog is initializing based on value of paging.
+       *
+       * @param {Boolean} paging
+       * @return {String} text to show user
+       */
+      _getInitializationText: function(paging) {
+        return (paging ? 'Loading more facets...' : 'Loading full facet list...');
+      },
+
+      /**
+       * Toggles initialization variable to false when applicable.
+       *
+       * @private
+       */
+      _toggleInitialization: function() {
+        if(this.loading === false && this.initializing === true) {
+          this._setInitializing(false);
+        }
       }
     });
   </script>
