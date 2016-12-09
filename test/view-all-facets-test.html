@@ -132,6 +132,7 @@
 
           flush(function() {
             assert.isNotNull(element.$$('div.initialize-text'));
+            assert.equal(element.$$('div.initialize-text').innerText, element._getInitializationText(element.paging));
             assert.isNotNull(element.$$('div.hide-facets'));
             done();
           });
