@@ -4,14 +4,14 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
 
 ### Example
 ```html
-    <view-all-facets
-        title="Country"
-        buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
-        loading="[[countryLoading]]"
-        error="[[countryError]]"
-        facet-selection="{{countryFacetSelection}}"
-        agg-count="{{countryCount}}">
-    </view-all-facets>
+<view-all-facets
+  title="Country"
+  buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
+  loading="[[countryLoading]]"
+  error="[[countryError]]"
+  facet-selection="{{countryFacetSelection}}"
+  agg-count="{{countryCount}}">
+</view-all-facets>
 ```
 
 ### Dependencies
@@ -20,3 +20,18 @@ Dependencies are installed using [Bower](http://bower.io/):
 
     npm install -g bower
     bower install
+
+### Testing
+
+Tests are run using [web-component-tester](https://github.com/Polymer/web-component-tester):
+
+    npm install -g web-component-tester
+    wct
+
+### Demonstration & Documentation
+
+Demonstration and documentation are viewed using [polyserve](https://github.com/PolymerLabs/polyserve):
+
+    npm install -g polyserve
+    polyserve
+

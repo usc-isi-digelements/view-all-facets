@@ -9,15 +9,16 @@
 A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.  This lets users view all facets in a separate dialog window if the number of facets is very large.
 
 ### Example
-
-    <view-all-facets
-        title="Country"
-        buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
-        loading="[[countryLoading]]"
-        error="[[countryError]]"
-        facet-selection="{{countryFacetSelection}}"
-        agg-count="{{countryCount}}">
-    </view-all-facets>
+```html
+<view-all-facets
+  title="Country"
+  buckets="[[countryResult.aggregations.countryAgg.countryAgg.buckets]]"
+  loading="[[countryLoading]]"
+  error="[[countryError]]"
+  facet-selection="{{countryFacetSelection}}"
+  agg-count="{{countryCount}}">
+</view-all-facets>
+```
 
 @demo demo/index.html
 -->
@@ -116,6 +117,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
 
       properties: {
         /**
+         * (Optional)
+         *
          * Title to display over checkbox list.
          *
          * @type {String}
@@ -125,6 +128,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Required)
+         *
          * The list of buckets from an elastic search aggregation result used in the checkbox-list-display.  Each bucket is an object with properties:
          * {Number} doc_count, {String} key, {String} text (optional)
          *
@@ -135,6 +140,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * Max facets currently displayed (changes if paging is set to true).
          *
          * @type {Number}
@@ -147,6 +154,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * Indicates whether or not elasticsearch is still loading results.
          *
          * @type {Boolean}
@@ -157,6 +166,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * Where the last elasticsearch error is stored (if any occur).
          *
          * @type {Object}
@@ -166,6 +177,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Output)
+         *
          * Contains state of facet checkboxes to persist selection state between queries.  This object maps a facet bucket key to an object with properties:
          * {String} category, boolean enabled, {String} key, {String} text
          *
@@ -181,6 +194,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Output)
+         *
          * Current size of associated aggregation.
          *
          * @type {Number}
@@ -193,6 +208,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Output)
+         *
          * Wait to show user checkboxes until initializing is complete.
          *
          * @type {Boolean}
@@ -203,6 +220,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * When false (default), all facets will be shown. If set to true, the 'Show More' button will be displayed to page through results.
          *
          * @type {Boolean}
@@ -214,6 +233,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * Field on which to order associated aggregation.
          *
          * @type {String}
@@ -226,6 +247,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * Whether to show the text in the checkboxes as images.
          *
          * @type {Boolean}
@@ -237,6 +260,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
+         * (Optional)
+         *
          * The style class for images (if the "images" property is true).
          *
          * @type {String}
