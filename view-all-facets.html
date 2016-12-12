@@ -84,7 +84,7 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         </div>
         <paper-dialog-scrollable class="modal-section">
           <template is="dom-if" if="[[initializing]]">
-            <div>[[_getInitializationText(paging)]]</div>
+            <div class="initialize-text">[[_getInitializationText(paging)]]</div>
           </template>
           <div class$="[[_getFacetClass(initializing)]]">
             <checkbox-list-display
@@ -100,7 +100,7 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
               <paper-button raised class="show-more-btn" on-tap="showMoreAggs">Show More</paper-button>
             </template>
             <template is="dom-if" if="[[!facetsFullList.length]]">
-              <div>[[_createFacetText(loading, error)]]</div>
+              <div class="full-facets-list-text">[[_createFacetText(loading, error)]]</div>
             </template>
           </div>
         </paper-dialog-scrollable>

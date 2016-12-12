@@ -51,6 +51,130 @@
           assert.equal(element.currentMaxFacets, 10);
           assert.isUndefined(element.initializing);
           assert.isFalse(element.paging);
+          assert.equal(element.orderBy, '');
+          assert.isFalse(element.images);
+          assert.equal(element.imageStyleClass, '');
+        });
+
+        test('loading text appears when necessary', function(done) {
+          flush(function() {
+            assert.isNotNull(element.$$('span'));
+            assert.equal(element.$$('span').innerText, 'Loading...');
+            assert.isNull(element.$$('span.view-all'));
+            done();
+          });
+        });
+
+        test('view all text appears when loading is set to false', function(done) {
+          element.loading = false;
+
+          flush(function() {
+            assert.isNotNull(element.$$('span.view-all'));
+            assert.deepEqual(element.$$('span.view-all').onTap, element.openFacetsModal());
+            assert.equal(element.$$('span.view-all').innerText, 'View All');
+            done();
+          });
+        });
+
+        test('no text appears if there are no buckets', function(done) {
+          element.set('buckets', []);
+
+          flush(function() {
+            assert.isNull(element.$$('span'));
+            assert.isNull(element.$$('span.view-all'));
+            done();
+          });
+        });
+
+        test('facets modal is part of the template', function() {
+          assert.isNotNull(element.$$('#facetsModal'));
+          assert.isTrue(element.$$('#facetsModal').modal);
+        });
+
+        test('title is part of the template', function() {
+          assert.isNotNull(element.$$('div.title'));
+          assert.equal(element.$$('div.title').innerText, element.title);
+        });
+
+        test('correct elements exist if facetsFullList is defined', function(done) {
+          flush(function() {
+            assert.isNotNull(element.$$('aggregation-sort'));
+            assert.equal(element.$$('aggregation-sort').orderBy, element.orderBy);
+            assert.isNull(element.$$('div.full-facets-list-text'));
+            done();
+          });
+        });
+
+        test('correct elements exist if facetsFullList is undefined', function(done) {
+          element.facetsFullList = undefined;
+
+          flush(function() {
+            assert.isNull(element.$$('aggregation-sort'));
+            assert.isNotNull(element.$$('div.full-facets-list-text'));
+            assert.equal(element.$$('div.full-facets-list-text').innerText, element._createFacetText(element.loading, element.error));
+            done();
+          });
+        });
+
+        test('scrollable element and checkbox list are present', function() {
+          assert.isNotNull(element.$$('paper-dialog-scrollable'));
+          assert.isTrue(element.$$('paper-dialog-scrollable').className.includes('modal-section'));
+          assert.isNotNull(element.$$('checkbox-list-display'));
+          assert.deepEqual(element.$$('checkbox-list-display').images, element.images);
+          assert.deepEqual(element.$$('checkbox-list-display').facetSelection, element.facetSelection);
+          assert.equal(element.$$('checkbox-list-display').imageStyleClass, element.imageStyleClass);
+          assert.equal(element.$$('checkbox-list-display').show, 0);
+          assert.equal(element.$$('checkbox-list-display').category, element.title);
+        });
+
+        test('if initializing is set to true, appropriate elements are shown', function(done) {
+          element._setInitializing(true);
+
+          flush(function() {
+            assert.isNotNull(element.$$('div.initialize-text'));
+            assert.equal(element.$$('div.initialize-text').innerText, element._getInitializationText(element.paging));
+            assert.isNotNull(element.$$('div.hide-facets'));
+            done();
+          });
+        });
+
+        test('if initializing is set to false, appropriate elements are hidden', function(done) {
+          element._setInitializing(false);
+
+          flush(function() {
+            assert.isNull(element.$$('div.initialize-text'));
+            assert.isNull(element.$$('div.hide-facets'));
+            done();
+          });
+        });
+
+        test('display show more button when applicable', function(done) {
+          element.aggCount = 5;
+          element.loading = false;
+          element.paging = true;
+
+          flush(function() {
+            assert.isNotNull(element.$$('paper-button.show-more-btn'));
+            assert.isTrue(element.$$('paper-button.show-more-btn').raised);
+            assert.equal(element.$$('paper-button.show-more-btn').onTap, element.showMoreAggs());
+            done();
+          });
+        });
+
+        test('show more button does not appear if _ableToShowMore returns false', function(done) {
+          element.paging = false;
+
+          flush(function() {
+            assert.isNull(element.$$('paper-button.show-more-btn'));
+            done();
+          });
+        });
+
+        test('close button is displayed for dialog', function() {
+          assert.isNotNull(element.$$('div.buttons'));
+          assert.isNotNull(element.$$('div.buttons').children[0]);
+          assert.isNotNull(element.$$('div.buttons').children[0].localName, 'paper-button');
+          assert.deepEqual(element.$$('div.buttons').children[0].onTap, element.closeFacetsModal());
         });
 
         test('_getInitializationText returns correct text', function() {
