@@ -1,14 +1,12 @@
 {
   "name": "view-all-facets",
-  "version": "1.0.5",
-  "authors": [
-    "Next Century Corporation"
-  ],
   "description": "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
+  "version": "1.0.5",
+  "authors": ["Next Century Corporation"],
+  "license": "Apache-2.0",
   "keywords": [
     "web-component",
-    "polymer",
-    "seed"
+    "polymer"
   ],
   "main": "view-all-facets.html",
   "license": "http://polymer.github.io/LICENSE.txt",
