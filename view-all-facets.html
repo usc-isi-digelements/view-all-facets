@@ -99,10 +99,10 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
           </div>
         </div>
         <paper-dialog-scrollable class="modal-section">
-          <template is="dom-if" if="[[initializing]]">
+          <template is="dom-if" if="[[_initializing]]">
             <div class="initialize-text">[[_getInitializationText(paging)]]</div>
           </template>
-          <div class$="[[_getFacetClass(initializing)]]">
+          <div class$="[[_getFacetClass(_initializing)]]">
             <checkbox-list-display
               images="[[images]]"
               image-style-class="[[imageStyleClass]]"
@@ -113,7 +113,7 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
               category="[[title]]">
             </checkbox-list-display>
             <template is="dom-if" if="[[_ableToShowMore(paging, loading, facetsFullList, aggCount)]]">
-              <paper-button raised class="show-more-btn" on-tap="showMoreAggs">Show More</paper-button>
+              <paper-button raised class="show-more-btn" on-tap="_showMoreAggs">Show More</paper-button>
             </template>
             <template is="dom-if" if="[[!facetsFullList.length]]">
               <div class="full-facets-list-text">[[_createFacetText(loading, error)]]</div>
@@ -224,18 +224,6 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         },
 
         /**
-         * (Output)
-         *
-         * Wait to show user checkboxes until initializing is complete.
-         *
-         * @type {Boolean}
-         */
-        initializing: {
-          type: Boolean,
-          readOnly: true
-        },
-
-        /**
          * (Optional)
          *
          * When false (default), all facets will be shown. If set to true, the 'Show More' button will be displayed to page through results.
@@ -286,14 +274,26 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
         imageStyleClass: {
           type: String,
           value: ''
+        },
+
+        /**
+         * Wait to show user checkboxes until initializing is complete.
+         *
+         * @type {Boolean}
+         * @private
+         */
+        _initializing: {
+          type: Boolean,
+          readOnly: true
         }
+
       },
 
       /**
        * Closes the dialog that displays all facets.
        */
       closeFacetsModal: function() {
-        this._setInitializing(false);
+        this._set_initializing(false);
         this.aggCount = this.currentMaxFacets;
       },
 
@@ -302,14 +302,15 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
        */
       openFacetsModal: function() {
         this.aggCount = this.paging ? this.aggCount += this.currentMaxFacets : 0;
-        this._setInitializing(this.loading ? true : false);
+        this._set_initializing(this.loading ? true : false);
         this.$.facetsModal.open();
       },
 
       /**
        * Increments aggCount based on value of currentMaxFacets
+       * @private
        */
-      showMoreAggs: function() {
+      _showMoreAggs: function() {
         this.aggCount += this.currentMaxFacets;
       },
 
@@ -377,8 +378,8 @@ A Polymer Element showing a button that opens a dialog with checkbox-list-displa
        * @private
        */
       _toggleInitialization: function() {
-        if(this.loading === false && this.initializing === true) {
-          this._setInitializing(false);
+        if(this.loading === false && this._initializing === true) {
+          this._set_initializing(false);
         }
       }
     });

@@ -65,7 +65,7 @@ limitations under the License.
           assert.isNull(element.error);
           assert.equal(element.aggCount, 10);
           assert.equal(element.currentMaxFacets, 10);
-          assert.isUndefined(element.initializing);
+          assert.isUndefined(element._initializing);
           assert.isFalse(element.paging);
           assert.equal(element.orderBy, '');
           assert.isFalse(element.images);
@@ -143,8 +143,8 @@ limitations under the License.
           assert.equal(element.$$('checkbox-list-display').category, element.title);
         });
 
-        test('if initializing is set to true, appropriate elements are shown', function(done) {
-          element._setInitializing(true);
+        test('if _initializing is set to true, appropriate elements are shown', function(done) {
+          element._set_initializing(true);
 
           flush(function() {
             assert.isNotNull(element.$$('div.initialize-text'));
@@ -154,8 +154,8 @@ limitations under the License.
           });
         });
 
-        test('if initializing is set to false, appropriate elements are hidden', function(done) {
-          element._setInitializing(false);
+        test('if _initializing is set to false, appropriate elements are hidden', function(done) {
+          element._set_initializing(false);
 
           flush(function() {
             assert.isNull(element.$$('div.initialize-text'));
@@ -172,7 +172,7 @@ limitations under the License.
           flush(function() {
             assert.isNotNull(element.$$('paper-button.show-more-btn'));
             assert.isTrue(element.$$('paper-button.show-more-btn').raised);
-            assert.equal(element.$$('paper-button.show-more-btn').onTap, element.showMoreAggs());
+            assert.equal(element.$$('paper-button.show-more-btn').onTap, element._showMoreAggs());
             done();
           });
         });
@@ -205,10 +205,10 @@ limitations under the License.
           assert.isFalse(element._ableToShowMore(true, false, element.facetsFullList, 15));
         });
 
-        test('showMoreAggs returns correct value', function() {
-          element.showMoreAggs();
+        test('_showMoreAggs returns correct value', function() {
+          element._showMoreAggs();
           assert.equal(element.aggCount, 20);
-          element.showMoreAggs();
+          element._showMoreAggs();
           assert.equal(element.aggCount, 30);
         });
 
@@ -221,26 +221,26 @@ limitations under the License.
 
         test('_toggleInitialization does nothing if loading is true', function() {
           element._toggleInitialization();
-          assert.isUndefined(element.initializing);
+          assert.isUndefined(element._initializing);
         });
 
-        test('openFacetsModal sets aggCount to zero and initializing to false', function() {
+        test('openFacetsModal sets aggCount to zero and _initializing to false', function() {
           element.loading = false;
           element.openFacetsModal();
           assert.isTrue(element.$.facetsModal.opened);
           assert.equal(element.aggCount, 0);
-          assert.isFalse(element.initializing);
+          assert.isFalse(element._initializing);
         });
 
-        test('openFacetsModal sets initializing to true, which is reset to false after loading property change', function() {
+        test('openFacetsModal sets _initializing to true, which is reset to false after loading property change', function() {
           element.loading = true;
           element.openFacetsModal();
           assert.isTrue(element.$.facetsModal.opened);
           assert.equal(element.aggCount, 0);
-          assert.isTrue(element.initializing);
+          assert.isTrue(element._initializing);
 
           element.loading = false;
-          assert.isFalse(element.initializing);
+          assert.isFalse(element._initializing);
         });
 
         test('openFacetsModal sets aggCount to 20 if paging is set to true', function() {
@@ -254,7 +254,7 @@ limitations under the License.
           element.closeFacetsModal();
           assert.isFalse(element.$.facetsModal.opened);
           assert.equal(element.aggCount, element.currentMaxFacets);
-          assert.isFalse(element.initializing);
+          assert.isFalse(element._initializing);
         });
 
         test('_createFacetText returns correct text', function() {

@@ -1,7 +1,7 @@
 {
   "name": "view-all-facets",
   "description": "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
