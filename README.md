@@ -1,6 +1,6 @@
 # view-all-facets
 
-A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.  This lets users view all facets in a separate dialog window if the number of facets is very large.  Can be used with the [elastic-checkbox-list-filter](https://github.com/DigElements/elastic-checkbox-list-filter) element to create elasticsearch filters.
+A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.  This lets users view all facets in a separate dialog window if the number of facets is very large. 
 
 ### Example
 ```html
