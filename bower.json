@@ -1,7 +1,7 @@
 {
   "name": "view-all-facets",
   "description": "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
   "keywords": [
@@ -9,7 +9,6 @@
     "polymer"
   ],
   "main": "view-all-facets.html",
-  "license": "http://polymer.github.io/LICENSE.txt",
   "homepage": "https://github.com/DigElements/view-all-facets/",
   "ignore": [
     "/.*",

@@ -39,43 +39,43 @@ limitations under the License.
       <p>Note that in dialog view, sort option is not hooked up to an aggregation in this demo and will not re-sort the checkbox list.</p>
     </template>
     <script>
-        (function(document) {
-            var demo = document.querySelector('#demo');
+      (function(document) {
+        var demo = document.querySelector('#demo');
 
-            demo.buckets = [{
-                  key: 'foo',
-                  doc_count: 15,
-                  text: 'blah'
-              },{
-                  key: 'bar',
-                  doc_count: 20,
-                  text: 'meh'
-              },{
-                  key: 'baz',
-                  doc_count: 35,
-                  text: 'yo'
-              },{
-                  key: 'bah',
-                  doc_count: 5,
-                  text: 'hello'
-              },{
-                  key: 'bat',
-                  doc_count: 15,
-                  text: 'hi'
-              }];
+        demo.buckets = [{
+          key: 'foo',
+          doc_count: 15,
+          text: 'blah'
+        },{
+          key: 'bar',
+          doc_count: 20,
+          text: 'meh'
+        },{
+          key: 'baz',
+          doc_count: 35,
+          text: 'yo'
+        },{
+          key: 'bah',
+          doc_count: 5,
+          text: 'hello'
+        },{
+          key: 'bat',
+          doc_count: 15,
+          text: 'hi'
+        }];
 
-            demo.loading = false;
+        demo.loading = false;
 
-            demo.facetSelection = {};
+        demo.facetSelection = {};
 
-            demo.showFacetSelections = function(objectChange) {
-                return JSON.stringify(this.facetSelection);
-            };
+        demo.showFacetSelections = function(objectChange) {
+          return JSON.stringify(this.facetSelection);
+        };
 
-            demo.getOrderByString = function(orderBy) {
-              return orderBy === '' ? 'Blank (default option)' : orderBy;
-            };
-        })(document);
+        demo.getOrderByString = function(orderBy) {
+          return orderBy === '' ? 'Blank (default option)' : orderBy;
+        };
+      })(document);
     </script>
   </body>
 </html>
