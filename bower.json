@@ -9,7 +9,7 @@
     "polymer"
   ],
   "main": "view-all-facets.html",
-  "homepage": "https://github.com/DigElements/view-all-facets/",
+  "homepage": "https://github.com/usc-isi-digelements/view-all-facets/",
   "ignore": [
     "/.*",
     "/test/"
@@ -17,8 +17,8 @@
   "dependencies": {
     "polymer": "Polymer/polymer#^1.7.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
-    "checkbox-list-display": "DigElements/checkbox-list-display#^1.0.4",
-    "aggregation-sort": "DigElements/aggregation-sort#^1.0.1"
+    "checkbox-list-display": "usc-isi-digelements/checkbox-list-display#^1.0.4",
+    "aggregation-sort": "usc-isi-digelements/aggregation-sort#^1.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
