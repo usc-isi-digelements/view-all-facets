@@ -1,24 +1,19 @@
 {
   "name": "view-all-facets",
-  "description": "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
-  "version": "1.0.8",
+  "description":
+    "A Polymer Element showing a button that opens a dialog with checkbox-list-display elements.",
+  "version": "1.0.9",
   "authors": ["Next Century Corporation"],
   "license": "Apache-2.0",
-  "keywords": [
-    "web-component",
-    "polymer"
-  ],
+  "keywords": ["web-component", "polymer"],
   "main": "view-all-facets.html",
   "homepage": "https://github.com/usc-isi-digelements/view-all-facets/",
-  "ignore": [
-    "/.*",
-    "/test/"
-  ],
+  "ignore": ["/.*", "/test/"],
   "dependencies": {
     "polymer": "Polymer/polymer#^1.7.0",
     "paper-elements": "PolymerElements/paper-elements#^1.0.7",
     "checkbox-list-display": "usc-isi-digelements/checkbox-list-display#^1.0.4",
-    "aggregation-sort": "usc-isi-digelements/aggregation-sort#^1.0.1"
+    "aggregation-sort": "usc-isi-digelements/aggregation-sort#^2.2.2"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.1.7",
